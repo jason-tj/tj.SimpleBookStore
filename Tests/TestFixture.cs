@@ -29,28 +29,17 @@ namespace tj.SimpleBookStore.Tests
             Context.Books.Add(new Book { Id = 2, Title = "Book 2", Author = "Author 2", Price = 20.0M, Category = "Non-Fiction" });
             Context.SaveChanges();
 
-            // 初始化用户管理器
-            //var userStore = new UserStore<User>(Context);
-            //var userValidators = new List<IUserValidator<User>>();
-            //var passwordValidators = new List<IPasswordValidator<User>>();
-            //var userManager = new UserManager<User>(
-            //    userStore, null, null, userValidators, passwordValidators, null, null, null, null);
+
+            //var store = new UserStore<User>(Context);
+            //var passwordHasher = new PasswordHasher<User>();
+            //var userValidators = new List<IUserValidator<User>> { new UserValidator<User>() };
+            //var passwordValidators = new List<IPasswordValidator<User>> { new PasswordValidator<User>() };
+            //var errorDescriber = new IdentityErrorDescriber();
+            //var services = new Mock<IServiceProvider>().Object;
+            //UserManager = new UserManager<User>(store, null, passwordHasher, userValidators, passwordValidators, null, errorDescriber, services, null);
+
             //// 预初始化用户数据
-            //UserManager = userManager;
-
-            var store = new UserStore<User>(Context);
-            //var options = new IdentityOptions();
-            //var idOptions = Options.Create(options);
-            var passwordHasher = new PasswordHasher<User>();
-            var userValidators = new List<IUserValidator<User>> { new UserValidator<User>() };
-            var passwordValidators = new List<IPasswordValidator<User>> { new PasswordValidator<User>() };
-            //var logger = new Logger<UserManager<User>>(new LoggerFactory());
-            var errorDescriber = new IdentityErrorDescriber();
-            var services = new Mock<IServiceProvider>().Object;
-            UserManager = new UserManager<User>(store, null, passwordHasher, userValidators, passwordValidators, null, errorDescriber, services, null);
-
-            // 预初始化用户数据
-            InitializeUsersAsync().GetAwaiter().GetResult();
+            //InitializeUsersAsync().GetAwaiter().GetResult();
         }
 
         private async Task InitializeUsersAsync()

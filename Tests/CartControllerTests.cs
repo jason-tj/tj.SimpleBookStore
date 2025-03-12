@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System.Security.Claims;
 using tj.SimpleBookStore.Controllers;
 using tj.SimpleBookStore.DTOs;
 using tj.SimpleBookStore.Models;
 using tj.SimpleBookStore.Repository;
 using tj.SimpleBookStore.Services;
+using tj.SimpleBookStore.Services.Interface;
 using tj.SimpleBookStore.Unit;
 using Xunit;
 
@@ -16,6 +18,7 @@ namespace tj.SimpleBookStore.Tests
     public class CartControllerTests : IClassFixture<TestFixture>
     {
         private readonly TestFixture _fixture;
+        private readonly HttpClient _client;
         private readonly CartController _controller;
 
         private const string SecretKey = "your-256-bit-secret-1234567890abcdef1234567890abcdef"; // 与主项目一致
@@ -32,25 +35,35 @@ namespace tj.SimpleBookStore.Tests
             _controller = new CartController(cartService);
         }
 
-        [Fact]
-        public async Task AddToCart_ShouldReturnOk()
+        private void SetUserContext(string userId, string role)
         {
             // 生成 Token
-            var token = JwtTokenHelper.GenerateToken("general", "general", SecretKey, Issuer, Audience);
+            var token = JwtTokenHelper.GenerateToken(userId, role, SecretKey, Issuer, Audience);
 
             // 创建 ClaimsPrincipal
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, "general"),
-                //new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                //new Claim(ClaimTypes.Role, role)
             };
             var identity = new ClaimsIdentity(claims, "TestAuth");
             var principal = new ClaimsPrincipal(identity);
 
-            // 模拟 HttpContext
+            // 设置 HttpContext
             var httpContext = new DefaultHttpContext();
             httpContext.User = principal;
 
+            // 将 HttpContext 分配给 Controller
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+        }
+
+        [Fact]
+        public async Task AddToCart_ShouldReturnOk()
+        {
+            SetUserContext("general", "general");
             // Arrange
             var cartItemDto = new CartItemDto { BookId = 1, Quantity = 2 };
 
@@ -65,7 +78,8 @@ namespace tj.SimpleBookStore.Tests
         public async Task GetCart_ShouldReturnCartItems()
         {
             // Arrange
-            var userId = "user1";
+            SetUserContext("general", "general");
+            var userId = "general";
             _fixture.Context.CartItems.Add(new CartItem { Id = 1, UserId = userId, BookId = 1, Quantity = 2 });
             _fixture.Context.SaveChanges();
 
