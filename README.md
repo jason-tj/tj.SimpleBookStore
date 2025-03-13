@@ -112,6 +112,22 @@ dotnet run
 
 ## API 文档
 
+### 权限管理
+
+#### 获取token
+
+- **URL**: `/api/Auth/token?username={username}`
+
+- **Method**: `GET`
+
+- **Response**:
+
+  ```
+    {
+      "token": "ajshdjkashdkjasdh",
+    }
+  ```
+
 ### 书籍管理
 
 #### 获取所有书籍
@@ -251,3 +267,7 @@ dotnet test
 ```
 dotnet test --filter Category=Integration
 ```
+
+## 综述
+
+由于时间问题，该项目并没有采取项目架构的分层设计，也没有进行docker的容器化部署测试，用户管理直接使用了IdentityUser的结构，没有针对性的设计用户密码登录流程。预设了两个用户general、admin，仅支持这两个用户获取token之后使用后续接口，将token内容复制粘贴之后在swagger中直接调用即可。
