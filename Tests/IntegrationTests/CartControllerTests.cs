@@ -21,7 +21,7 @@ namespace tj.SimpleBookStore.Tests.IntegrationTests
         private readonly TestFixture _fixture;
         private readonly HttpClient _client;
         private readonly CartController _controller;
-        private readonly UserContext _userContext;
+        private readonly Mock<UserContextProxy> _mockUserContext;
 
         private const string SecretKey = "your-256-bit-secret-1234567890abcdef1234567890abcdef"; // 与主项目一致
         private const string Issuer = "tj-issuer";
@@ -33,7 +33,9 @@ namespace tj.SimpleBookStore.Tests.IntegrationTests
             _fixture = fixture;
             var cartRepository = new CartRepository(_fixture.Context);
             var bookRepository = new BookRepository(_fixture.Context);
-            var cartService = new CartService(cartRepository, bookRepository, _userContext);
+
+            _mockUserContext = new Mock<UserContextProxy>();
+            var cartService = new CartService(cartRepository, bookRepository, _mockUserContext.Object);
             _controller = new CartController(cartService);
         }
 
@@ -60,6 +62,9 @@ namespace tj.SimpleBookStore.Tests.IntegrationTests
             {
                 HttpContext = httpContext
             };
+            _mockUserContext.Setup(uc => uc.CurrentUser)
+                       .Returns(new UserInfo { Username = userId, Role = userId, UserId = userId });
+            //_userContext.CurrentUser = new UserInfo { UserId = userId, Role = userId, Username = userId };
         }
 
         [Fact]
