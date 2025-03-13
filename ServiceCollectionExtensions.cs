@@ -36,9 +36,9 @@ namespace tj.SimpleBookStore
 
                 if (serviceImplementation != null)
                 {
-                    if (serviceInterface.Name == nameof(IJwtService))
-                        services.AddSingleton(serviceInterface, serviceImplementation);
-                    else
+                    //if (serviceInterface.Name == nameof(IAuthenticationService))
+                    //    services.AddSingleton(serviceInterface, serviceImplementation);
+                    //else
                         services.AddScoped(serviceInterface, serviceImplementation);
                 }
             }
@@ -166,9 +166,9 @@ namespace tj.SimpleBookStore
                 {
                     tracerProviderBuilder
                         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("MyService"))
-                        .AddAspNetCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
-                        .AddConsoleExporter();
+                        .AddAspNetCoreInstrumentation() // 启用 ASP.NET Core 自动检测
+                        .AddHttpClientInstrumentation() // 启用 HttpClient 自动检测
+                        .AddConsoleExporter();  
                 })
                 .WithMetrics(metricsProviderBuilder =>
                 {

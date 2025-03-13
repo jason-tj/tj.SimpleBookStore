@@ -32,8 +32,7 @@ namespace tj.SimpleBookStore.Controllers
         [HttpPost("Checkout")]
         public async Task<IActionResult> Checkout()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var order = await _checkoutService.CheckoutAsync(userId);
+            var order = await _checkoutService.CheckoutAsync();
             return Ok(new { TotalPrice = order.TotalAmount });
         }
 
@@ -44,8 +43,7 @@ namespace tj.SimpleBookStore.Controllers
         [HttpPost("GetOrderList")]
         public async Task<IActionResult> GetOrderList()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var orders = await _checkoutService.GetOrderListAsync(userId);
+            var orders = await _checkoutService.GetOrderListAsync();
             return Ok(orders);
         }
     }

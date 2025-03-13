@@ -1,4 +1,5 @@
-﻿using tj.SimpleBookStore.DTOs;
+﻿using tj.SimpleBookStore.DbContexts;
+using tj.SimpleBookStore.DTOs;
 using tj.SimpleBookStore.Models;
 using tj.SimpleBookStore.Repository;
 using tj.SimpleBookStore.Services.Interface;
@@ -12,37 +13,43 @@ namespace tj.SimpleBookStore.Services
     {
         private readonly ICartRepository _cartRepository;
         private readonly IBookRepository _bookRepository;
+        private readonly UserContext _userContext;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cartRepository"></param>
         /// <param name="bookRepository"></param>
-        public CartService(ICartRepository cartRepository, IBookRepository bookRepository)
+        public CartService(ICartRepository cartRepository, IBookRepository bookRepository, UserContext userContext)
         {
             _cartRepository = cartRepository;
             _bookRepository = bookRepository;
+            _userContext = userContext;
         }
 
         /// <summary>
         /// 获取购物车内容
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<CartItem>> GetCartAsync(string userId)
+        public async Task<IEnumerable<CartItem>> GetCartAsync()
         {
+            if (_userContext?.CurrentUser == null)
+                throw new KeyNotFoundException("user not authentication");
+            var userId = _userContext.CurrentUser.UserId;
             return await _cartRepository.GetCartItemsByUserIdAsync(userId);
         }
 
         /// <summary>
         /// 添加购物车
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="cartItemDto"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task AddToCartAsync(string userId, CartItemDto cartItemDto)
+        public async Task AddToCartAsync(CartItemDto cartItemDto)
         {
+            if (_userContext?.CurrentUser == null)
+                throw new KeyNotFoundException("user not authentication");
+            var userId = _userContext.CurrentUser.UserId;
             // 检查书籍是否存在
             var book = await _bookRepository.GetBookByIdAsync(cartItemDto.BookId);
             if (book == null)
@@ -74,12 +81,14 @@ namespace tj.SimpleBookStore.Services
         /// <summary>
         /// 移除购物项
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="cartItemId"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public async Task RemoveFromCartAsync(string userId, int cartItemId)
+        public async Task RemoveFromCartAsync(int cartItemId)
         {
+            if (_userContext?.CurrentUser == null)
+                throw new KeyNotFoundException("user not authentication");
+            var userId = _userContext.CurrentUser.UserId;
             var cartItem = await _cartRepository.GetCartItemByIdAsync(cartItemId);
             if (cartItem == null || cartItem.UserId != userId)
             {

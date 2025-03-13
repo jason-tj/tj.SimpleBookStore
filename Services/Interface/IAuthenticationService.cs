@@ -1,6 +1,6 @@
 ﻿namespace tj.SimpleBookStore.Services.Interface
 {
-    public interface IJwtService
+    public interface IAuthenticationService
     {
         string GenerateToken(string username);
     }

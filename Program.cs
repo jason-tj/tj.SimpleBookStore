@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Logs;
 using tj.DbContexts.SimpleBookStore;
 using tj.SimpleBookStore;
+using tj.SimpleBookStore.DbContexts;
+using tj.SimpleBookStore.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.RegisterServicesAndRepositories();
 // 使用内存数据库
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("OnlineBookstoreDb"));
+builder.Services.AddTransient<IStartupFilter, DataInitializationStartupFilter>();
+builder.Services.AddSingleton<UserContext>();
 
 // 配置 OpenTelemetry
 builder.Services.RegisterOpenTelemetry();

@@ -13,21 +13,21 @@ namespace tj.SimpleBookStore.Services.Interface
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IEnumerable<CartItem>> GetCartAsync(string userId);
+        Task<IEnumerable<CartItem>> GetCartAsync();
         /// <summary>
         /// 添加购物车
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="cartItemDto"></param>
         /// <returns></returns>
-        Task AddToCartAsync(string userId, CartItemDto cartItemDto);
+        Task AddToCartAsync(CartItemDto cartItemDto);
         /// <summary>
         /// 移除购物车项
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="cartItemId"></param>
         /// <returns></returns>
-        Task RemoveFromCartAsync(string userId, int cartItemId);
+        Task RemoveFromCartAsync(int cartItemId);
         /// <summary>
         /// 清空购物车
         /// </summary>

@@ -28,7 +28,7 @@ namespace tj.SimpleBookStore.Unit
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                //new Claim(ClaimTypes.Role, role) 
+                new Claim(ClaimTypes.Role, role) 
             };
 
             var token = new JwtSecurityToken(

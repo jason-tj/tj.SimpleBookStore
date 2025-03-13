@@ -56,6 +56,11 @@ namespace tj.DbContexts.SimpleBookStore
                 .HasForeignKey(oi => oi.BookId);
         }
 
+        /// <summary>
+        /// 初始化用户
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <returns></returns>
         public async Task InitializeUsersAsync(UserManager<User> userManager)
         {
             var general = new User { UserName = "general" };

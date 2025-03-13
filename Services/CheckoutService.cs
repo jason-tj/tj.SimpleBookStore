@@ -1,4 +1,5 @@
-﻿using tj.SimpleBookStore.Models;
+﻿using tj.SimpleBookStore.DbContexts;
+using tj.SimpleBookStore.Models;
 using tj.SimpleBookStore.Repository;
 using tj.SimpleBookStore.Services.Interface;
 
@@ -12,6 +13,7 @@ namespace tj.SimpleBookStore.Services
         private readonly ICartRepository _cartRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IBookRepository _bookRepository;
+        private readonly UserContext _userContext;
 
         /// <summary>
         /// 
@@ -19,11 +21,12 @@ namespace tj.SimpleBookStore.Services
         /// <param name="cartRepository"></param>
         /// <param name="orderRepository"></param>
         /// <param name="bookRepository"></param>
-        public CheckoutService(ICartRepository cartRepository, IOrderRepository orderRepository, IBookRepository bookRepository)
+        public CheckoutService(ICartRepository cartRepository, IOrderRepository orderRepository, IBookRepository bookRepository, UserContext userContext)
         {
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _bookRepository = bookRepository;
+            _userContext = userContext;
         }
 
         /// <summary>
@@ -32,8 +35,11 @@ namespace tj.SimpleBookStore.Services
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<Order> CheckoutAsync(string userId)
+        public async Task<Order> CheckoutAsync()
         {
+            if (_userContext?.CurrentUser == null)
+                throw new KeyNotFoundException("user not authentication");
+            var userId = _userContext.CurrentUser.UserId;
             // 获取购物车中的商品
             var cartItems = await _cartRepository.GetCartItemsByUserIdAsync(userId);
             if (cartItems == null || !cartItems.Any())
@@ -95,8 +101,11 @@ namespace tj.SimpleBookStore.Services
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IEnumerable<Order>> GetOrderListAsync(string userId)
+        public async Task<IEnumerable<Order>> GetOrderListAsync()
         {
+            if (_userContext?.CurrentUser == null)
+                throw new KeyNotFoundException("user not authentication");
+            var userId = _userContext.CurrentUser.UserId;
             return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
     }

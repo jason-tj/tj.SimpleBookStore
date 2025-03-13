@@ -6,11 +6,11 @@
     public class CartItemDto
     {
         /// <summary>
-        /// 书籍ID
+        /// *书籍ID
         /// </summary>
         public int BookId { get; set; }
         /// <summary>
-        /// 数量
+        /// *数量
         /// </summary>
         public int Quantity { get; set; }
         /// <summary>

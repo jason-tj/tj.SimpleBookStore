@@ -5,7 +5,7 @@ using tj.SimpleBookStore.Repository;
 using tj.SimpleBookStore.Services;
 using Xunit;
 
-namespace tj.SimpleBookStore.Tests
+namespace tj.SimpleBookStore.Tests.UnitTests
 {
     /// <summary>
     /// 

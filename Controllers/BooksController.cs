@@ -53,11 +53,12 @@ namespace tj.SimpleBookStore.Controllers
 
         /// <summary>
         /// 添加书籍
+        /// 仅支持admin 用户
         /// </summary>
         /// <param name="bookDto"></param>
         /// <returns></returns>
         [HttpPost("AddBook")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddBook([FromBody] BookDto bookDto)
         {
             var book = await _bookService.AddBookAsync(bookDto);

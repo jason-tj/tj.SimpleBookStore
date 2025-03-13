@@ -34,8 +34,7 @@ namespace tj.SimpleBookStore.Controllers
         [HttpGet("GetCart")]
         public async Task<IActionResult> GetCart()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
-            var cartItems = await _cartService.GetCartAsync(userId);
+            var cartItems = await _cartService.GetCartAsync();
             return Ok(cartItems);
         }
 
@@ -47,8 +46,7 @@ namespace tj.SimpleBookStore.Controllers
         [HttpPost("AddToCart")]
         public async Task<IActionResult> AddToCart(CartItemDto cartItemDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
-            await _cartService.AddToCartAsync(userId, cartItemDto);
+            await _cartService.AddToCartAsync(cartItemDto);
             return Ok();
         }
     }

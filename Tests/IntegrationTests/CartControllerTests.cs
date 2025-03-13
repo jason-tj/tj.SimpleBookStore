@@ -2,6 +2,7 @@
 using Moq;
 using System.Security.Claims;
 using tj.SimpleBookStore.Controllers;
+using tj.SimpleBookStore.DbContexts;
 using tj.SimpleBookStore.DTOs;
 using tj.SimpleBookStore.Models;
 using tj.SimpleBookStore.Repository;
@@ -10,7 +11,7 @@ using tj.SimpleBookStore.Services.Interface;
 using tj.SimpleBookStore.Unit;
 using Xunit;
 
-namespace tj.SimpleBookStore.Tests
+namespace tj.SimpleBookStore.Tests.IntegrationTests
 {
     /// <summary>
     /// 
@@ -20,6 +21,7 @@ namespace tj.SimpleBookStore.Tests
         private readonly TestFixture _fixture;
         private readonly HttpClient _client;
         private readonly CartController _controller;
+        private readonly UserContext _userContext;
 
         private const string SecretKey = "your-256-bit-secret-1234567890abcdef1234567890abcdef"; // 与主项目一致
         private const string Issuer = "tj-issuer";
@@ -31,7 +33,7 @@ namespace tj.SimpleBookStore.Tests
             _fixture = fixture;
             var cartRepository = new CartRepository(_fixture.Context);
             var bookRepository = new BookRepository(_fixture.Context);
-            var cartService = new CartService(cartRepository, bookRepository);
+            var cartService = new CartService(cartRepository, bookRepository, _userContext);
             _controller = new CartController(cartService);
         }
 
@@ -44,7 +46,7 @@ namespace tj.SimpleBookStore.Tests
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
-                //new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role)
             };
             var identity = new ClaimsIdentity(claims, "TestAuth");
             var principal = new ClaimsPrincipal(identity);

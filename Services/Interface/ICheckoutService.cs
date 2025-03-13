@@ -12,7 +12,7 @@ namespace tj.SimpleBookStore.Services.Interface
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<Order> CheckoutAsync(string userId);
+        Task<Order> CheckoutAsync();
         /// <summary>
         /// 
         /// </summary>
@@ -25,6 +25,6 @@ namespace tj.SimpleBookStore.Services.Interface
         /// <param name="userId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        Task<IEnumerable<Order>> GetOrderListAsync(string userId);
+        Task<IEnumerable<Order>> GetOrderListAsync();
     }
 }

@@ -42,34 +42,34 @@ namespace tj.SimpleBookStore.Tests
             //InitializeUsersAsync().GetAwaiter().GetResult();
         }
 
-        private async Task InitializeUsersAsync()
-        {
-            try
-            {
-                var general = new User { UserName = "general",Name = "general" };
-                var resultGeneral = await UserManager.CreateAsync(general, Environment.GetEnvironmentVariable("USER_PASSWORD") ?? "Password123!");
-                if (!resultGeneral.Succeeded)
-                {
-                    throw new Exception("Failed to create general user");
-                }
+        //private async Task InitializeUsersAsync()
+        //{
+        //    try
+        //    {
+        //        var general = new User { UserName = "general",Name = "general" };
+        //        var resultGeneral = await UserManager.CreateAsync(general, Environment.GetEnvironmentVariable("USER_PASSWORD") ?? "Password123!");
+        //        if (!resultGeneral.Succeeded)
+        //        {
+        //            throw new Exception("Failed to create general user");
+        //        }
 
-                var admin = new User { UserName = "admin" , Name = "admin", };
-                var resultAdmin = await UserManager.CreateAsync(admin, Environment.GetEnvironmentVariable("ADMIN_PASSWORD") ?? "Password123!");
-                if (!resultAdmin.Succeeded)
-                {
-                    throw new Exception("Failed to create admin user");
-                }
+        //        var admin = new User { UserName = "admin" , Name = "admin", };
+        //        var resultAdmin = await UserManager.CreateAsync(admin, Environment.GetEnvironmentVariable("ADMIN_PASSWORD") ?? "Password123!");
+        //        if (!resultAdmin.Succeeded)
+        //        {
+        //            throw new Exception("Failed to create admin user");
+        //        }
 
-                // 添加日志记录
-                Console.WriteLine("Users initialized successfully.");
-            }
-            catch (Exception ex)
-            {
-                // 记录异常信息
-                Console.WriteLine($"Error initializing users: {ex.Message}");
-                throw;
-            }
-        }
+        //        // 添加日志记录
+        //        Console.WriteLine("Users initialized successfully.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // 记录异常信息
+        //        Console.WriteLine($"Error initializing users: {ex.Message}");
+        //        throw;
+        //    }
+        //}
 
         public void Dispose()
         {
